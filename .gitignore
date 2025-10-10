@@ -1,0 +1,46 @@
+# Jupyter Notebooks
+earth_observation_starter.ipynb
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Earth Engine
+.config/earthengine/
+*.geojson
+*.tif
+
+# Data files
+*.nc
+*.hdf
+*.h5
+data/
+outputs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
