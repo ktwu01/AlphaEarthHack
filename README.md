@@ -14,6 +14,8 @@ integrating physics based models, ML and DS to create transformative software to
 
 ## Team Alpha
 
+![Meet The Team](./images/Team.png)
+
 | Name | Role | Bio |
 | :--- | :--- | :--- |
 | **Xihan Yao** | Our Developer | 1st year GRG PhD student, Remote Sensing/GIS, Human-Environment Interactions |
