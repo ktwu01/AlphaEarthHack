@@ -16,12 +16,6 @@ integrating physics based models, ML and DS to create transformative software to
 
 ![Meet The Team](./images/Team.png)
 
-| Name | Role | Bio |
-| :--- | :--- | :--- |
-| **Xihan Yao** | Our Developer | 1st year GRG PhD student, Remote Sensing/GIS, Human-Environment Interactions |
-| **Koutian Wu** | Our Developer | 2nd year GEO PhD student, Develop the Noah-MP land surface model, Understand the land surface by integrating physics and AI |
-| **Rushi Bhatt** | Our Developer | Senior EVS (GRG) Undergraduate, GeoAI, ML, Sediment/Runoff Routing. "Write Code. Test Code. Push Code. … Save The Planet. (some steps may be missing)." |
-
 
 ## Technical Details
 
