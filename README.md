@@ -58,7 +58,7 @@ Here are some other visualizations from our project:
 | :---: | :---: |
 | ![Global View](./images/Global_View.png) | ![Years Side by Side](./images/Years_Side_by_Side.png) |
 
-| Cosine Similarity | Feature Search |
+| Cosine Similarity (shows areas of change) | Feature Search |
 | :---: | :---: |
 | ![Cosine Similarity](./images/Cosine_Similarity.png) | ![Search](./images/Search.png) |
 
