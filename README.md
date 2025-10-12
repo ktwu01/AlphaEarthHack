@@ -33,6 +33,8 @@ integrating physics based models, ML and DS to create transformative software to
     *   ipyleaflet
     *   Google Earth Engine
     *   Google Earth Engine map
+    *   Leaflet.js
+    *   Plotly.js
 
 ## Reproducibility
 
@@ -44,11 +46,15 @@ pip install -r requirements.txt
 python app.py
 ```
 
+## Interactive Dashboard Details
+
+The interactive dashboard is built with standard web technologies like HTML, CSS, and JavaScript, and leverages the powerful open-source libraries Leaflet.js and Plotly.js to create interactive maps and data visualizations.
+
 ## Presentation & Visualizations
 
 In addition to our [PDF presentation](./presentation.pdf), a key feature of our project is the interactive dashboard that allows for dynamic exploration of the data and results.
 
-Here are some sample visualizations from our project:
+Here are some other visualizations from our project:
 
 | AlphaEarth Magnitude | AlphaEarth Duration |
 | :---: | :---: |
@@ -81,4 +87,23 @@ Here are some sample visualizations from our project:
 
 ## References and Citations
 
-List any references or citations used in your project.
+
+Brown, C. F., Kazmierski, M. R., Pasquarella, V. J., et al. (2025). *AlphaEarth Foundations: An embedding field model for accurate and in-depth global mapping from sparse label data*. arXiv preprint arXiv:2507.22291. [https://arxiv.org/abs/2507.22291](https://arxiv.org/abs/2507.22291)
+
+da Costa-Luis, C. O. (2019). tqdm: A Fast, Extensible Progress Meter for Python and CLI. *Journal of Open Source Software*, *4*(37), 1277. [https://doi.org/10.21105/joss.01277](https://doi.org/10.21105/joss.01277)
+
+Google DeepMind. (2023). [https://deepmind.google/](https://deepmind.google/)
+
+Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D., & Moore, R. (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. *Remote Sensing of Environment*, *202*, 18–27. [https://doi.org/10.1016/j.rse.2017.06.031](https://doi.org/10.1016/j.rse.2017.06.031)
+
+Harris, C. R., Millman, K. J., van der Walt, S. J., Gommers, R., Virtanen, P., Cournapeau, D., … Oliphant, T. E. (2020). Array programming with NumPy. *Nature*, *585*, 357–362. [https://doi.org/10.1038/s41586-020-2649-2](https://doi.org/10.1038/s41586-020-2649-2)
+
+ipyleaflet developers. (2023). *ipyleaflet* (Version 0.17.2) [Computer software]. [https://github.com/jupyter-widgets/ipyleaflet](https://github.com/jupyter-widgets/ipyleaflet)
+
+Janowicz, K., Gao, S., McKenzie, G., Hu, Y., & Bhaduri, B. (2020). GeoAI: spatially explicit artificial intelligence techniques for geographic knowledge discovery and beyond. *International Journal of Geographical Information Science*, *34*(4), 625–636. [https://doi.org/10.1080/13658816.2019.1684500](https://doi.org/10.1080/13658816.2019.1684500)
+
+Kennedy, R. E., Yang, Z., Gorelick, N., Braaten, J., Cavalcante, L., Cohen, W. B., & Healey, S. (2018). Implementation of the LandTrendr Algorithm on Google Earth Engine. *Remote Sensing*, *10*(5), 691. [https://doi.org/10.3390/rs10050691](https://doi.org/10.3390/rs10050691)
+
+Agafonkin, V., & Leaflet Contributors. (n.d.). *Leaflet: An open-source JavaScript library for interactive maps*. Retrieved October 12, 2025, from https://leafletjs.com
+
+Plotly Technologies Inc. (2015). *Collaborative data science*. Plotly Technologies Inc. https://plot.ly
