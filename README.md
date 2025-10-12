@@ -56,6 +56,10 @@ In addition to our [PDF presentation](./presentation.pdf), a key feature of our 
 
 Here are some other visualizations from our project:
 
+| Global View | Years Side-By-Side |
+| :---: | :---: |
+| ![Global View](./images/Global_View.png) | ![Years Side by Side](./images/Years_Side_by_Side.png) |
+
 | AlphaEarth Magnitude | AlphaEarth Duration |
 | :---: | :---: |
 | ![AE_Mag_masked_Austin](./images/AE_Mag_masked_Austin.png) | ![AE_Dur_masked_Austin](./images/AE_Dur_masked_Austin.png) |
