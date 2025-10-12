@@ -14,7 +14,7 @@ Click [here](https://ktwu01.github.io/AlphaEarthHack/) for an **interactive dash
 Sr. Manager in AI for Energy & Utilities, Deloitte. Our Mentor
 integrating physics based models, ML and DS to create transformative software tools for the oil and gas industry.
 
-## Team Alpha
+## `Alpha` Team Members
 
 ![Meet The Team](./images/Team.png)
 
@@ -36,13 +36,7 @@ integrating physics based models, ML and DS to create transformative software to
 
 ## Reproducibility
 
-Instructions on how to set up and run your project.
-
-```bash
-# Example setup commands
-pip install -r requirements.txt
-python app.py
-```
+Please [fork](https://github.com/ktwu01/AlphaEarthHack/fork) this repo and clone it. Use Python 3.12.11 and make sure you installed Jupyter Notebook to run the notebooks in this project.
 
 ## Interactive Dashboard Details
 
