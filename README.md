@@ -2,7 +2,7 @@
 
 Our project seeks to leverage cutting-edge remote sensing analysis to identify and monitor land cover changes, with a focus on visualizing our changing world With effective and efficient data sources. By integrating advanced algorithms and datasets, we provide a comprehensive tool for understanding the dynamics of our changing planet. This tool will support researchers and the professionals in all different disciplines of geography and geology to detect, measure and analyze the changes that interest them.
 
-If you're having a hard time understanding any part of this project and want explanations or if you want to run pretty visualizations that we've built, please check out ![this jupyter notebook](./AlphaEarth_Story.ipynb)
+If you're having a hard time understanding any part of this project and want explanations or if you want to run pretty visualizations that we've built, please check out ![this jupyter notebook](./AlphaEarth_Story.ipynb) (note: the visualizations are interactive and cannot be run or seen on GitHub but there are screenshots down below).
 
 Click [here](https://ktwu01.github.io/AlphaEarthHack/) for an **interactive dashboard**.
 
