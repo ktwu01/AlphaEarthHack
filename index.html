@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlphaEarth Fire & Drought Tracker</title>
+    <title>AlphaEarth Austin Change Analysis</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <!-- Chart.js for time series -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <!-- Plotly.js for time series -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     
     <style>
         * {
@@ -56,6 +56,22 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             padding: 30px;
+        }
+
+        .plot-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 300px; /* Give some default height */
+        }
+
+        #plot1 {
+            grid-column: 1 / -1;
+        }
+
+        #plot2 {
+            grid-column: 1 / -1;
         }
         
         #mapid {
@@ -191,66 +207,29 @@
 <body>
     <div class="container">
         <header>
-            <h1>Mock Data by AlphaEarth Fire & Drought Tracker</h1>
-            <p>Wildfire and drought monitoring using 10m resolution embeddings</p>
+            <h1>AlphaEarth Austin Change Analysis (2017-2024)</h1>
+            
         </header>
         
         <div class="main-content">
             <!-- Map Section -->
             <div id="mapid"></div>
             
-            <!-- Time Series Chart -->
-            <div class="chart-container">
-                <h3>Risk Trend Analysis (2017-2024)</h3>
-                <canvas id="timeSeriesChart"></canvas>
-            </div>
-            
-            <!-- Statistics Panel -->
-            <!-- These are only mock data -->
-            <div class="info-panel">
-                <div class="stat-card">
-                    <h4>High Fire Risk Areas</h4>
-                    <div class="value">23</div>
-                </div>
-                <div class="stat-card">
-                    <h4>Active Monitoring Sites</h4>
-                    <div class="value">156</div>
-                </div>
-                <div class="stat-card">
-                    <h4>Severe Drought Zones</h4>
-                    <div class="value">12</div>
-                </div>
-                <div class="stat-card">
-                    <h4>Data Coverage</h4>
-                    <div class="value">Global</div>
-                </div>
-            </div>
+            <!-- Time Series Charts with Plotly -->
+            <div id="plot3" class="plot-container"></div>
+            <div id="plot1" class="plot-container"></div>
+            <div id="plot2" class="plot-container"></div>
         </div>
         
         <!-- Legend -->
         <div class="legend">
-            <div class="legend-item">
-                <div class="legend-color fire-severe"></div>
-                <span>Severe Fire Risk</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color fire-moderate"></div>
-                <span>Moderate Fire Risk</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color drought-severe"></div>
-                <span>Severe Drought</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color no-risk"></div>
-                <span>Low Risk</span>
-            </div>
+
         </div>
         
         <footer>
-            <p><strong>AlphaEarth Foundations</strong> | Hackathon 2025 | Powered by Google Earth Engine</p>
+            <p><strong>AlphaEarth Foundations</strong> | Powered by Google Earth Engine</p>
             <p style="font-size: 0.9em; margin-top: 10px;">
-                Click any location to see detailed fire & drought analysis
+                2025 Geoscience Hackathon by <strong>Alpha</strong> Team
             </p>
         </footer>
     </div>
@@ -260,193 +239,103 @@
     
     <script>
         // ========== MAP INITIALIZATION ==========
-        var mymap = L.map('mapid').setView([31.5, -99.5], 6); // Texas centered
+        var mymap = L.map('mapid').setView([30.209732, -97.6589635], 12); // Austin centered
         
         // Satellite base layer
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             maxZoom: 14,
             attribution: 'Esri'
         }).addTo(mymap);
-        
-        // ========== PLACEHOLDER DATA ==========
-        // These are only mock data
-        const locations = [
-            {
-                name: "Austin, TX",
-                lat: 30.2672,
-                lng: -97.7431,
-                fireRisk: 72,
-                droughtSeverity: "Moderate",
-                trend: "Increasing",
-                color: "#ff6f00"
-            },
-            {
-                name: "Houston, TX",
-                lat: 29.7604,
-                lng: -95.3698,
-                fireRisk: 45,
-                droughtSeverity: "Low",
-                trend: "Stable",
-                color: "#ffa726"
-            },
-            {
-                name: "Dallas, TX",
-                lat: 32.7767,
-                lng: -96.7970,
-                fireRisk: 88,
-                droughtSeverity: "Severe",
-                trend: "Increasing",
-                color: "#d32f2f"
-            },
-            {
-                name: "San Antonio, TX",
-                lat: 29.4241,
-                lng: -98.4936,
-                fireRisk: 61,
-                droughtSeverity: "Moderate",
-                trend: "Decreasing",
-                color: "#ff6f00"
-            },
-            {
-                name: "El Paso, TX",
-                lat: 31.7619,
-                lng: -106.4850,
-                fireRisk: 79,
-                droughtSeverity: "Severe",
-                trend: "Stable",
-                color: "#d32f2f"
-            },
-            {
-                name: "Lubbock, TX",
-                lat: 33.5779,
-                lng: -101.8552,
-                fireRisk: 68,
-                droughtSeverity: "Moderate",
-                trend: "Increasing",
-                color: "#ff6f00"
-            }
+
+        // Define Austin polygon coordinates
+        var austinPolygon = [
+            [30.150367, -97.583924],
+            [30.150367, -97.734003],
+            [30.269097, -97.734003],
+            [30.269097, -97.583924]
         ];
+
+        // Create the polygon and add it to the map
+        L.polygon(austinPolygon, {
+            color: 'yellow',
+            fillColor: '#f03',
+            fillOpacity: 0.2
+        }).addTo(mymap).bindPopup("Austin, TX Analysis Region");
         
-        // ========== ADD MARKERS ==========
-        locations.forEach(loc => {
-            const marker = L.circleMarker([loc.lat, loc.lng], {
-                radius: 12,
-                fillColor: loc.color,
-                color: "#fff",
-                weight: 3,
-                opacity: 1,
-                fillOpacity: 0.8
-            }).addTo(mymap);
-            
-            // Popup content
-            const riskClass = loc.fireRisk > 70 ? 'risk-high' : loc.fireRisk > 50 ? 'risk-medium' : 'risk-low';
-            
-            marker.bindPopup(`
-                <div class="popup-content">
-                    <h4>${loc.name}</h4>
-                    <p><strong>Fire Risk:</strong> ${loc.fireRisk}/100</p>
-                    <p><strong>Drought:</strong> ${loc.droughtSeverity}</p>
-                    <p><strong>Trend:</strong> ${loc.trend}</p>
-                    <span class="risk-badge ${riskClass}">
-                        ${loc.fireRisk > 70 ? 'HIGH RISK' : loc.fireRisk > 50 ? 'MODERATE' : 'LOW RISK'}
-                    </span>
-                </div>
-            `);
-        });
         
-        // ========== TIME SERIES CHART ==========
-        const ctx = document.getElementById('timeSeriesChart').getContext('2d');
-        
-        // These are only mock data
-        const timeSeriesChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
-                datasets: [
-                    {
-                        label: 'Fire Risk Index',
-                        data: [45, 52, 58, 71, 68, 75, 82, 88],
-                        borderColor: '#d32f2f',
-                        backgroundColor: 'rgba(211, 47, 47, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        pointRadius: 5,
-                        pointHoverRadius: 8
-                    },
-                    {
-                        label: 'Drought Severity',
-                        data: [38, 42, 55, 63, 59, 68, 72, 79],
-                        borderColor: '#8b4513',
-                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        pointRadius: 5,
-                        pointHoverRadius: 8
-                    },
-                    {
-                        label: 'Combined Risk',
-                        data: [41, 47, 56, 67, 63, 71, 77, 83],
-                        borderColor: '#ff6f00',
-                        backgroundColor: 'rgba(255, 111, 0, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        pointRadius: 5,
-                        pointHoverRadius: 8,
-                        borderDash: [5, 5]
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            usePointStyle: true,
-                            padding: 15
-                        }
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        padding: 12,
-                        titleFont: { size: 14 },
-                        bodyFont: { size: 13 }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        title: {
-                            display: true,
-                            text: 'Risk Score (0-100)',
-                            font: { size: 13, weight: 'bold' }
-                        },
-                        grid: {
-                            color: 'rgba(0,0,0,0.05)'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        title: {
-                            display: true,
-                            text: 'Year',
-                            font: { size: 13, weight: 'bold' }
-                        }
-                    }
-                },
-                interaction: {
-                    mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
-                }
-            }
-        });
+        // ========== PLOTLY CHART DATA ==========
+        const plotData = {
+            "labels": [2018, 2019, 2020, 2021, 2022, 2023, 2024],
+            "datasets": [
+                { "label": "Median (p50)", "data": [0.9512, 0.9395, 0.9629, 0.9629, 0.959, 0.9708, 0.9551] },
+                { "label": "Trimmed mean (10 to 90%)", "data": [0.9463, 0.9376, 0.9604, 0.9606, 0.958, 0.9673, 0.9535] },
+                { "label": "IQR (p75 to p25)", "data": [0.039, 0.0429, 0.0273, 0.0272, 0.0233, 0.0234, 0.0273] },
+                { "label": "StdDev", "data": [0.0395, 0.0458, 0.0463, 0.0492, 0.046, 0.0552, 0.047] },
+                { "label": "Frac < 0.95", "data": [0.5092, 0.6367, 0.2897, 0.284, 0.3083, 0.2053, 0.4024] }
+            ]
+        };
+
+        // Helper to get dataset by label
+        function getDataset(label) {
+            return plotData.datasets.find(d => d.label === label).data;
+        }
+
+        // ========== CREATE PLOTS ==========
+        // 1) Central tendency
+        const trace1 = {
+            x: plotData.labels,
+            y: getDataset('Median (p50)'),
+            mode: 'lines+markers',
+            name: 'Median (p50)'
+        };
+        const trace2 = {
+            x: plotData.labels,
+            y: getDataset('Trimmed mean (10 to 90%)'),
+            mode: 'lines+markers',
+            name: 'Trimmed mean (10–90%)'
+        };
+        const layout1 = {
+            title: 'Central Tendency',
+            yaxis: { title: 'Cosine similarity', range: [0.9, 1.0], domain: [0, 1] },
+            xaxis: { title: 'Year', domain: [0.12, 0.95] },
+            margin: { l: 80, r: 50, t: 50, b: 50 }
+        };
+        Plotly.newPlot('plot1', [trace1, trace2], layout1);
+
+        // 2) Spread
+        const trace3 = {
+            x: plotData.labels,
+            y: getDataset('IQR (p75 to p25)'),
+            mode: 'lines+markers',
+            name: 'IQR (p75–p25)'
+        };
+        const trace4 = {
+            x: plotData.labels,
+            y: getDataset('StdDev'),
+            mode: 'lines+markers',
+            name: 'StdDev'
+        };
+        const layout2 = {
+            title: 'Spread',
+            yaxis: { title: 'Spread', domain: [0, 1] },
+            xaxis: { title: 'Year', domain: [0.12, 0.95] },
+            margin: { l: 80, r: 50, t: 50, b: 50 }
+        };
+        Plotly.newPlot('plot2', [trace3, trace4], layout2);
+
+        // 3) Area fraction below threshold
+        const trace5 = {
+            x: plotData.labels,
+            y: getDataset('Frac < 0.95'),
+            type: 'bar',
+            name: 'Frac < 0.95'
+        };
+        const layout3 = {
+            title: 'Area Fraction Below Threshold',
+            yaxis: { title: 'Frac < 0.95' },
+            xaxis: { title: 'Year' }
+        };
+        Plotly.newPlot('plot3', [trace5], layout3);
     </script>
 </body>
 </html>
