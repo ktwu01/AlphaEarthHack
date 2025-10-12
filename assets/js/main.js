@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Satellite base layer
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 14,
+        maxZoom: 11,
         attribution: 'Esri'
     }).addTo(mymap);
 
@@ -59,9 +59,17 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     const layout1 = {
         title: 'Central Tendency',
-        yaxis: { title: 'Cosine similarity', range: [0.9, 1.0], domain: [0, 1] },
+        yaxis: { title: { text: 'Cosine similarity', font: { size: 10 } }, range: [0.9, 1.0], domain: [0, 1] },
         xaxis: { title: 'Year', domain: [0.01, 0.99] },
-        margin: { l: 80, r: 50, t: 50, b: 50 }
+        margin: { l: 50, r: 20, t: 50, b: 50 },
+        legend: {
+            orientation: 'h',
+            yanchor: 'top',
+            y: 0.98,
+            xanchor: 'right',
+            x: 0.98,
+            bgcolor: 'rgba(255, 255, 255, 0.5)'
+        }
     };
     Plotly.newPlot('plot1', [trace1, trace2], layout1, plotlyConfig);
 
@@ -80,9 +88,17 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     const layout2 = {
         title: 'Spread',
-        yaxis: { title: 'Spread', domain: [0, 1] },
+        yaxis: { title: { text: 'Spread', font: { size: 10 } }, domain: [0, 1] },
         xaxis: { title: 'Year', domain: [0.01, 0.99] },
-        margin: { l: 80, r: 50, t: 50, b: 50 }
+        margin: { l: 50, r: 20, t: 50, b: 50 },
+        legend: {
+            orientation: 'h',
+            yanchor: 'top',
+            y: 0.98,
+            xanchor: 'right',
+            x: 0.98,
+            bgcolor: 'rgba(255, 255, 255, 0.5)'
+        }
     };
     Plotly.newPlot('plot2', [trace3, trace4], layout2, plotlyConfig);
 
@@ -96,7 +112,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const layout3 = {
         title: 'Area Fraction Below Threshold',
         yaxis: { title: 'Frac < 0.95' },
-        xaxis: { title: 'Year' }
+        xaxis: { title: 'Year' },
+        margin: { l: 50, r: 20, t: 50, b: 50 },
+        showlegend: false
     };
     Plotly.newPlot('plot3', [trace5], layout3, plotlyConfig);
 });
