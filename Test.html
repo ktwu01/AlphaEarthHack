@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' https://unpkg.com/ https://cdn.plot.ly/; 
+                   style-src 'self' https://unpkg.com/ 'unsafe-inline'; 
+                   img-src 'self' https://unpkg.com/ https://server.arcgisonline.com/ data:; 
+                   font-src 'self'; 
+                   connect-src 'self'; 
+                   worker-src 'self' blob:; 
+                   object-src 'none'; 
+                   frame-src 'none'; 
+                   base-uri 'self';">
+    <title>AlphaEarth Austin Change Analysis (Mobile-Friendly)</title>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Leaflet CSS with SRI -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AlphaEarth Austin Change Analysis (2017-2024)</h1>
+        </header>
+        
+        <div class="main-content">
+            <!-- Map Section -->
+            <div id="mapid"></div>
+            
+            <!-- Time Series Charts with Plotly -->
+            <div id="plot3" class="plot-container"></div>
+            <div id="plot1" class="plot-container"></div>
+            <div id="plot2" class="plot-container"></div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend"></div>
+        
+        <footer>
+            <p><strong>AlphaEarth Foundations</strong> | Powered by Google Earth Engine</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">
+                2025 Geoscience Hackathon by <strong>Alpha</strong> Team
+            </p>
+        </footer>
+    </div>
+
+    <!-- Plotly.js with SRI (specific version) -->
+    <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+
+    <!-- Leaflet JS with SRI -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Your application script -->
+    <script src="assets/js/main.js" defer></script>
+</body>
+</html>
