@@ -13,6 +13,6 @@ Deliverables:
 # Github Repository Link
 • READMEmd with project description
 
-Click [here](https://ktwu01.github.io/AlphaEarthHack/ for an interactive dashboard.)
+Click [here](https://ktwu01.github.io/AlphaEarthHack/) for an interactive dashboard.
 
 ![dashboard](./images/dashboard.png)
