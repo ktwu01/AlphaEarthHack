@@ -297,7 +297,7 @@
         const layout1 = {
             title: 'Central Tendency',
             yaxis: { title: 'Cosine similarity', range: [0.9, 1.0], domain: [0, 1] },
-            xaxis: { title: 'Year', domain: [0.12, 0.95] },
+            xaxis: { title: 'Year', domain: [0.01, 0.99] },
             margin: { l: 80, r: 50, t: 50, b: 50 }
         };
         Plotly.newPlot('plot1', [trace1, trace2], layout1);
@@ -318,7 +318,7 @@
         const layout2 = {
             title: 'Spread',
             yaxis: { title: 'Spread', domain: [0, 1] },
-            xaxis: { title: 'Year', domain: [0.12, 0.95] },
+            xaxis: { title: 'Year', domain: [0.01, 0.99] },
             margin: { l: 80, r: 50, t: 50, b: 50 }
         };
         Plotly.newPlot('plot2', [trace3, trace4], layout2);
