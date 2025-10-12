@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaEarth Austin Change Analysis</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Plotly.js for time series -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .plot-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            min-height: 300px; /* Give some default height */
+        }
+
+        #plot1 {
+            grid-column: 1 / -1;
+        }
+
+        #plot2 {
+            grid-column: 1 / -1;
+        }
+        
+        #mapid {
+            height: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        canvas {
+            max-height: 460px;
+        }
+        
+        .info-panel {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: #ffffff;
+            color: #333;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+        
+        .stat-card h4 {
+            font-size: 0.9em;
+            opacity: 0.8;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .fire-severe { background: #d32f2f; }
+        .fire-moderate { background: #ff6f00; }
+        .fire-low { background: #ffa726; }
+        .drought-severe { background: #8b4513; }
+        .drought-moderate { background: #d4a574; }
+        .no-risk { background: #4caf50; }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #666;
+        }
+        
+        .popup-content {
+            min-width: 250px;
+        }
+        
+        .popup-content h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .popup-content p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+        
+        .risk-high { background: #ffebee; color: #c62828; }
+        .risk-medium { background: #fff3e0; color: #e65100; }
+        .risk-low { background: #e8f5e9; color: #2e7d32; }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AlphaEarth Austin Change Analysis (2017-2024)</h1>
+            
+        </header>
+        
+        <div class="main-content">
+            <!-- Map Section -->
+            <div id="mapid"></div>
+            
+            <!-- Time Series Charts with Plotly -->
+            <div id="plot3" class="plot-container"></div>
+            <div id="plot1" class="plot-container"></div>
+            <div id="plot2" class="plot-container"></div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="legend">
+
+        </div>
+        
+        <footer>
+            <p><strong>AlphaEarth Foundations</strong> | Powered by Google Earth Engine</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">
+                2025 Geoscience Hackathon by <strong>Alpha</strong> Team
+            </p>
+        </footer>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // ========== MAP INITIALIZATION ==========
+        var mymap = L.map('mapid').setView([30.209732, -97.6589635], 12); // Austin centered
+        
+        // Satellite base layer
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 14,
+            attribution: 'Esri'
+        }).addTo(mymap);
+
+        // Define Austin polygon coordinates
+        var austinPolygon = [
+            [30.150367, -97.583924],
+            [30.150367, -97.734003],
+            [30.269097, -97.734003],
+            [30.269097, -97.583924]
+        ];
+
+        // Create the polygon and add it to the map
+        L.polygon(austinPolygon, {
+            color: 'yellow',
+            fillColor: '#f03',
+            fillOpacity: 0.2
+        }).addTo(mymap).bindPopup("Austin, TX Analysis Region");
+        
+        
+        // ========== PLOTLY CHART DATA ==========
+        const plotData = {
+            "labels": [2018, 2019, 2020, 2021, 2022, 2023, 2024],
+            "datasets": [
+                { "label": "Median (p50)", "data": [0.9512, 0.9395, 0.9629, 0.9629, 0.959, 0.9708, 0.9551] },
+                { "label": "Trimmed mean (10 to 90%)", "data": [0.9463, 0.9376, 0.9604, 0.9606, 0.958, 0.9673, 0.9535] },
+                { "label": "IQR (p75 to p25)", "data": [0.039, 0.0429, 0.0273, 0.0272, 0.0233, 0.0234, 0.0273] },
+                { "label": "StdDev", "data": [0.0395, 0.0458, 0.0463, 0.0492, 0.046, 0.0552, 0.047] },
+                { "label": "Frac < 0.95", "data": [0.5092, 0.6367, 0.2897, 0.284, 0.3083, 0.2053, 0.4024] }
+            ]
+        };
+
+        // Helper to get dataset by label
+        function getDataset(label) {
+            return plotData.datasets.find(d => d.label === label).data;
+        }
+
+        // ========== CREATE PLOTS ==========
+        // 1) Central tendency
+        const trace1 = {
+            x: plotData.labels,
+            y: getDataset('Median (p50)'),
+            mode: 'lines+markers',
+            name: 'Median (p50)'
+        };
+        const trace2 = {
+            x: plotData.labels,
+            y: getDataset('Trimmed mean (10 to 90%)'),
+            mode: 'lines+markers',
+            name: 'Trimmed mean (10–90%)'
+        };
+        const layout1 = {
+            title: 'Central Tendency',
+            yaxis: { title: 'Cosine similarity', range: [0.9, 1.0], domain: [0, 1] },
+            xaxis: { title: 'Year', domain: [0.01, 0.99] },
+            margin: { l: 80, r: 50, t: 50, b: 50 }
+        };
+        Plotly.newPlot('plot1', [trace1, trace2], layout1);
+
+        // 2) Spread
+        const trace3 = {
+            x: plotData.labels,
+            y: getDataset('IQR (p75 to p25)'),
+            mode: 'lines+markers',
+            name: 'IQR (p75–p25)'
+        };
+        const trace4 = {
+            x: plotData.labels,
+            y: getDataset('StdDev'),
+            mode: 'lines+markers',
+            name: 'StdDev'
+        };
+        const layout2 = {
+            title: 'Spread',
+            yaxis: { title: 'Spread', domain: [0, 1] },
+            xaxis: { title: 'Year', domain: [0.01, 0.99] },
+            margin: { l: 80, r: 50, t: 50, b: 50 }
+        };
+        Plotly.newPlot('plot2', [trace3, trace4], layout2);
+
+        // 3) Area fraction below threshold
+        const trace5 = {
+            x: plotData.labels,
+            y: getDataset('Frac < 0.95'),
+            type: 'bar',
+            name: 'Frac < 0.95'
+        };
+        const layout3 = {
+            title: 'Area Fraction Below Threshold',
+            yaxis: { title: 'Frac < 0.95' },
+            xaxis: { title: 'Year' }
+        };
+        Plotly.newPlot('plot3', [trace5], layout3);
+    </script>
+</body>
+</html>
