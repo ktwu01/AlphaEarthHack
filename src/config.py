@@ -3,6 +3,9 @@ Centralized constants for AlphaEarth Change Detection.
 Import this module in notebooks to avoid hard-coding asset paths.
 """
 
+# ── Google Earth Engine project ───────────────────────────────────────────────
+GEE_PROJECT = "ardent-fusion-421917"
+
 # ── Google Earth Engine image collections ─────────────────────────────────────
 ALPHAEARTH_COLLECTION = "GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL"
 """AlphaEarth 64-band annual satellite embedding composite (2017–2024)."""
