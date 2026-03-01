@@ -32,8 +32,10 @@ venv.bak/
 *.nc
 *.hdf
 *.h5
-data/
-outputs/
+data/*
+!data/README.md
+outputs/*
+!outputs/README.md
 
 # IDE
 .vscode/
