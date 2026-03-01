@@ -1,58 +1,108 @@
-# AlphaEarthHack - UT Austin Geoscience Hackathon
+# AlphaEarth Change Detection — UT Austin Geoscience Hackathon
 
-Our project seeks to leverage cutting-edge remote sensing analysis to identify and monitor land cover changes, with a focus on visualizing our changing world With effective and efficient data sources. By integrating advanced algorithms and datasets, we provide a comprehensive tool for understanding the dynamics of our changing planet. This tool will support researchers and the professionals in all different disciplines of geography and geology to detect, measure and analyze the changes that interest them.
-
-If you're having a hard time understanding any part of this project and want explanations or if you want to run pretty visualizations that we've built, please check out ![this jupyter notebook](./AlphaEarth_Story.ipynb) (feel free to scroll past the long code segments) (note: the visualizations are interactive and cannot be run or seen on GitHub but there are screenshots down below).
+Our project leverages cutting-edge remote sensing to identify and monitor land cover changes, visualizing our changing world with effective and efficient data sources. By integrating advanced algorithms and datasets, we provide a comprehensive tool for understanding the dynamics of our changing planet — supporting researchers and professionals across geography and geology to detect, measure, and analyze the changes that interest them.
 
 Click [here](https://ktwu01.github.io/AlphaEarthHack/) for an **interactive dashboard**.
 
-![dashboard](./images/dashboard.png)
+For a narrative walkthrough, open [`notebooks/AlphaEarth_Story.ipynb`](./notebooks/AlphaEarth_Story.ipynb) (visualizations are interactive and cannot be rendered on GitHub; see screenshots below).
 
-## Mentor
+---
 
-**Dr. Brendon Hall**
-Sr. Manager in AI for Energy & Utilities, Deloitte. Our Mentor
-integrating physics based models, ML and DS to create transformative software tools for the oil and gas industry.
+## Team Alpha
 
-## `Alpha` Team Members
+**Mentor:** Dr. Brendon Hall — Sr. Manager in AI for Energy & Utilities, Deloitte
 
 ![Meet The Team](./images/Team.png)
 
+---
 
-## Technical Details
+## Quickstart
 
-*   **Open Source Libraries & Datasets:** 
-    *   Google DeepMind
-    *   Google AlphaEarth
-    *   LandTrendr
-    *   GeoAI
-    *   NumPy
-    *   tqdm
-    *   ipyleaflet
-    *   Google Earth Engine
-    *   Google Earth Engine map
-    *   Leaflet.js
-    *   Plotly.js
+### 1. Set up the environment
 
-## Reproducibility
+```bash
+conda env create -f environment.yml
+conda activate alphaearth
+```
 
-Please [fork](https://github.com/ktwu01/AlphaEarthHack/fork) this repo and clone it. Use Python 3.12.11 and make sure you installed Jupyter Notebook to run the notebooks in this project.
+### 2. Authenticate with Google Earth Engine
 
-## Interactive Dashboard Details
+```bash
+earthengine authenticate
+python -m ipykernel install --user --name alphaearth --display-name "alphaearth"
+```
 
-The interactive dashboard is built with standard web technologies like HTML, CSS, and JavaScript, and leverages the powerful open-source libraries Leaflet.js and Plotly.js to create interactive maps and data visualizations.
+> **Need a GEE project?** Register at [earthengine.google.com](https://earthengine.google.com). Free tier is sufficient.
 
-## Presentation & Visualizations
+### 3. Launch notebooks
 
-In addition to our [PDF presentation](./presentation.pdf), a key feature of our project is the interactive dashboard that allows for dynamic exploration of the data and results.
+```bash
+jupyter lab
+```
 
-Here are some other visualizations from our project:
+Run in this order:
+
+| # | Notebook | Purpose |
+|---|----------|---------|
+| 1 | `notebooks/alpha_tutorial.ipynb` | AlphaEarth K-means clustering intro |
+| 2 | `notebooks/AlphaEarth_Story.ipynb` | Main narrative: cosine similarity, dam detection, Austin urban growth |
+| 3 | `notebooks/AlphaEarth_Interactive_Mapping.ipynb` | Draw AOI → real-time change detection + inspector |
+| 4 | `notebooks/AlphaEarth_LandTrendr_ChangeComparison.ipynb` | Side-by-side comparison across 15 sites + IoU analysis |
+| 5 | `notebooks/LandTrendr_AlphaEarth.ipynb` | Deep-dive LandTrendr statistics; exports CSVs to `outputs/` |
+
+### 4. Smoke test (no GEE auth required)
+
+```bash
+python -m scripts.smoke_test
+```
+
+---
+
+## What We Built
+
+Detect and compare land-use change across 15 western U.S. sites using two complementary algorithms:
+
+| Algorithm | Method | Time range |
+|-----------|--------|------------|
+| **AlphaEarth** | Cosine similarity on 64-dim satellite embeddings (`GOOGLE/SATELLITE_EMBEDDING/V1/ANNUAL`) | 2017–2024 |
+| **LandTrendr** | Spectral-temporal NDVI trajectory fitting (Landsat) | 2016–2024 |
+
+Both produce three standardized layers — **YOD** (year of change), **MAG** (magnitude), **DUR** (duration) — and IoU analysis compares their overlap.
+
+**Study sites (15):**
+
+| Category | Sites |
+|----------|-------|
+| **Urbanization** | Austin TX, Dallas TX, Houston TX, Bend OR, Portland OR, Sacramento CA |
+| **Wildfires** | Bootleg OR (2021), Camp Fire CA (2018), Dixie CA (2021), Mosquito CA (2022), Santiam OR (2020) |
+| **Forest / Logging** | Angelina TX, Coos Bay OR, Mt Hood OR, Shasta-Trinity CA |
+
+---
+
+## Repository Layout
+
+```
+AlphaEarthHack/
+├── notebooks/          # Main Jupyter notebooks (run in order above)
+├── scripts/            # smoke_test.py
+├── src/                # Shared constants (EE asset paths, thresholds)
+├── images/             # Figures referenced in notebooks and README
+├── outputs/            # Generated CSVs / PNGs (git-ignored)
+├── data/               # Local data placeholder (git-ignored)
+├── backup/             # Archived exploratory notebooks
+├── environment.yml     # Conda environment spec (Python 3.12)
+└── pyproject.toml      # Ruff lint config
+```
+
+---
+
+## Visualizations
 
 | Global View | Years Side-By-Side |
 | :---: | :---: |
 | ![Global View](./images/Global_View.png) | ![Years Side by Side](./images/Years_Side_by_Side.png) |
 
-| Cosine Similarity (shows areas of change) | Similar Feature Detection |
+| Cosine Similarity (areas of change) | Similar Feature Detection |
 | :---: | :---: |
 | ![Cosine Similarity](./images/Cosine_Similarity.png) | ![Search](./images/Search.png) |
 
@@ -64,46 +114,36 @@ Here are some other visualizations from our project:
 | :---: | :---: |
 | ![LandTrendr_Mag_masked_Austin](./images/LandTrendr_Mag_masked_Austin.png) | ![LandTrendr_Dur_masked_Austin](./images/LandTrendr_Dur_masked_Austin.png) |
 
-| AlphaEarth Sample | Cosine Similarity |
-| :---: | :---: |
-| ![AE_sample_A01_A16_A09_Austin](./images/AE_sample_A01_A16_A09_Austin.png) | ![AE_sample_cosine_similarity_2023_24_Austin](./images/AE_sample_cosine_similarity_2023_24_Austin.png) |
-
-| AE Mag Austin | AE Yoc masked Austin |
-| :---: | :---: |
-| ![AE_Mag_Austin](./images/AE_Mag_Austin.png) | ![AE_Yoc_masked_Austin](./images/AE_Yoc_masked_Austin.png) |
-
-| Interactive AE dissimilarity plot TESLA Austin | Interactive AE exporting options TESLA Austin |
+| Interactive Dissimilarity Plot | Export Options |
 | :---: | :---: |
 | ![Interactive_AE_dissimilarity_plot_TESLA_Austin](./images/Interactive_AE_dissimilarity_plot_TESLA_Austin.png) | ![Interactive_AE_exporting_options_TESLA_Austin](./images/Interactive_AE_exporting_options_TESLA_Austin.png) |
 
-| Interactive AE layers TESLA Austin | Interactive AE mask Berkeley CA |
-| :---: | :---: |
-| ![Interactive_AE_layers_TESLA_Austin](./images/Interactive_AE_layers_TESLA_Austin.png) | ![Interactive_AE_mask_Berkeley_CA](./images/Interactive_AE_mask_Berkeley_CA.png) |
+![IoU comparison across 15 sites](images/IoU_LandTrendr_AlphaEarth_15sites.png)
 
-| LandTrendr Mag Austin | LandTrendr Yoc masked Austin |
-| :---: | :---: |
-| ![LandTrendr_Mag_Austin](./images/LandTrendr_Mag_Austin.png) | ![LandTrendr_Yoc_masked_Austin](./images/LandTrendr_Yoc_masked_Austin.png) |
+---
 
+## Open Source Libraries & Datasets
 
-## References and Citations
+Google DeepMind · Google AlphaEarth · LandTrendr · GeoAI · NumPy · tqdm · ipyleaflet · Google Earth Engine · Leaflet.js · Plotly.js
 
+---
 
-Brown, C. F., Kazmierski, M. R., Pasquarella, V. J., et al. (2025). *AlphaEarth Foundations: An embedding field model for accurate and in-depth global mapping from sparse label data*. arXiv preprint arXiv:2507.22291. [https://arxiv.org/abs/2507.22291](https://arxiv.org/abs/2507.22291)
+## References
 
-da Costa-Luis, C. O. (2019). tqdm: A Fast, Extensible Progress Meter for Python and CLI. *Journal of Open Source Software*, *4*(37), 1277. [https://doi.org/10.21105/joss.01277](https://doi.org/10.21105/joss.01277)
+Brown, C. F., et al. (2025). *AlphaEarth Foundations*. arXiv:2507.22291.
 
-Google DeepMind. (2023). [https://deepmind.google/](https://deepmind.google/)
+Kennedy, R. E., et al. (2018). Implementation of the LandTrendr Algorithm on Google Earth Engine. *Remote Sensing*, 10(5), 691.
 
-Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D., & Moore, R. (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. *Remote Sensing of Environment*, *202*, 18–27. [https://doi.org/10.1016/j.rse.2017.06.031](https://doi.org/10.1016/j.rse.2017.06.031)
+Gorelick, N., et al. (2017). Google Earth Engine: Planetary-scale geospatial analysis for everyone. *Remote Sensing of Environment*, 202, 18–27.
 
-Harris, C. R., Millman, K. J., van der Walt, S. J., Gommers, R., Virtanen, P., Cournapeau, D., … Oliphant, T. E. (2020). Array programming with NumPy. *Nature*, *585*, 357–362. [https://doi.org/10.1038/s41586-020-2649-2](https://doi.org/10.1038/s41586-020-2649-2)
+Harris, C. R., et al. (2020). Array programming with NumPy. *Nature*, 585, 357–362.
 
-ipyleaflet developers. (2023). *ipyleaflet* (Version 0.17.2) [Computer software]. [https://github.com/jupyter-widgets/ipyleaflet](https://github.com/jupyter-widgets/ipyleaflet)
+Janowicz, K., et al. (2020). GeoAI. *Int. J. Geographical Information Science*, 34(4), 625–636.
 
-Janowicz, K., Gao, S., McKenzie, G., Hu, Y., & Bhaduri, B. (2020). GeoAI: spatially explicit artificial intelligence techniques for geographic knowledge discovery and beyond. *International Journal of Geographical Information Science*, *34*(4), 625–636. [https://doi.org/10.1080/13658816.2019.1684500](https://doi.org/10.1080/13658816.2019.1684500)
+da Costa-Luis, C. O. (2019). tqdm. *Journal of Open Source Software*, 4(37), 1277.
 
-Kennedy, R. E., Yang, Z., Gorelick, N., Braaten, J., Cavalcante, L., Cohen, W. B., & Healey, S. (2018). Implementation of the LandTrendr Algorithm on Google Earth Engine. *Remote Sensing*, *10*(5), 691. [https://doi.org/10.3390/rs10050691](https://doi.org/10.3390/rs10050691)
+---
 
-Agafonkin, V., & Leaflet Contributors. (n.d.). *Leaflet: An open-source JavaScript library for interactive maps*. Retrieved October 12, 2025, from https://leafletjs.com
+## License
 
-Plotly Technologies Inc. (2015). *Collaborative data science*. Plotly Technologies Inc. https://plot.ly
+BSD 3-Clause — see [LICENSE](LICENSE).
