@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: AlphaEarth Change Detection
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: Wu
+    given-names: Koutian
+  - name: "Team Alpha, UT Austin Geoscience Hackathon"
+repository-code: https://github.com/ktwu01/AlphaEarthHack
+license: BSD-3-Clause
+date-released: "2025-10-12"
+version: "0.1.0"
+abstract: >
+  Satellite-based land-use change detection comparing AlphaEarth 64-dimensional
+  embeddings (cosine similarity) against LandTrendr NDVI spectral-temporal
+  analysis across 15 western U.S. study sites (urbanization, wildfire, logging).
+keywords:
+  - remote sensing
+  - change detection
+  - Google Earth Engine
+  - AlphaEarth
+  - LandTrendr
+  - land use
+  - geospatial

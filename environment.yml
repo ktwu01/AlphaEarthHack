@@ -1,0 +1,29 @@
+name: alphaearth
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - ipykernel>=6.30
+  - ipython>=9.6
+  - pip
+  - pip:
+    - earthengine-api>=1.6.11
+    - geemap>=0.36.4
+    - numpy>=2.2
+    - pandas>=2.3
+    - matplotlib>=3.10
+    - seaborn>=0.13
+    - scipy>=1.16
+    - ipyleaflet>=0.20
+    - ipywidgets>=8.1
+    - nbformat>=5.10
+    - nbconvert>=7.16
+    - rasterio>=1.4
+    - geopandas>=1.1
+    - folium>=0.20
+    - branca>=0.8
+    - bqplot>=0.12
+    - anywidget>=0.9
+    - eerepr>=0.1
+    - ruff>=0.9
