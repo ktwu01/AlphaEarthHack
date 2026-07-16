@@ -55,3 +55,9 @@ lt_training_*.csv
 
 # Raw hackathon screenshots (date-stamped)
 images/Screenshot*.png
+
+# Private research working files (active development moved to a new repo)
+ROADMAP.md
+docs/
+memory/
+backup/raw_screenshots/
