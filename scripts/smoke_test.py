@@ -41,6 +41,9 @@ def check_config() -> list[str]:
             LANDTRENDR_ASSETS,
             AE_MAG_THRESHOLD,
             LT_MAG_THRESHOLD,
+            AE_YEAR_START,
+            AE_YEAR_END,
+            GEE_PROJECT,
         )
     except ImportError as e:
         errors.append(f"Cannot import src.config: {e}")
@@ -48,6 +51,9 @@ def check_config() -> list[str]:
 
     if not ALPHAEARTH_COLLECTION:
         errors.append("ALPHAEARTH_COLLECTION is empty")
+
+    if not GEE_PROJECT:
+        errors.append("GEE_PROJECT is empty")
 
     expected_sites = 15
     if len(LANDTRENDR_ASSETS) != expected_sites:
@@ -66,11 +72,49 @@ def check_config() -> list[str]:
         errors.append(f"AE_MAG_THRESHOLD must be > 0, got {AE_MAG_THRESHOLD}")
     if LT_MAG_THRESHOLD <= 0:
         errors.append(f"LT_MAG_THRESHOLD must be > 0, got {LT_MAG_THRESHOLD}")
+    if not (2017 <= AE_YEAR_START <= AE_YEAR_END <= 2024):
+        errors.append(
+            f"Year range [{AE_YEAR_START}, {AE_YEAR_END}] is outside 2017–2024"
+        )
 
     if not errors:
+        print(f"  OK  GEE project: {GEE_PROJECT}")
         print(f"  OK  AlphaEarth collection: {ALPHAEARTH_COLLECTION}")
         print(f"  OK  Thresholds: AE={AE_MAG_THRESHOLD}, LT={LT_MAG_THRESHOLD}")
+        print(f"  OK  Year range: {AE_YEAR_START}–{AE_YEAR_END}")
 
+    return errors
+
+
+def check_change_detection() -> list[str]:
+    errors = []
+    try:
+        from src.change_detection import (
+            normalize_image,
+            compute_alpha_layers,
+            smooth_and_mask_alpha,
+            find_lt_band,
+        )
+        print("  OK  src.change_detection importable")
+        print(f"  OK  Functions: {normalize_image.__name__}, {compute_alpha_layers.__name__}, "
+              f"{smooth_and_mask_alpha.__name__}, {find_lt_band.__name__}")
+    except ImportError as e:
+        errors.append(f"Cannot import src.change_detection: {e}")
+    return errors
+
+
+def check_visualization() -> list[str]:
+    errors = []
+    try:
+        from src.visualization import VIS_YOD, VIS_MAG_AE, VIS_MAG_LT, VIS_DUR
+        for name, obj in [("VIS_YOD", VIS_YOD), ("VIS_MAG_AE", VIS_MAG_AE),
+                          ("VIS_MAG_LT", VIS_MAG_LT), ("VIS_DUR", VIS_DUR)]:
+            if not isinstance(obj, dict) or "palette" not in obj:
+                errors.append(f"{name} is not a valid vis-param dict")
+        if not errors:
+            print("  OK  src.visualization importable (VIS_YOD, VIS_MAG_AE, VIS_MAG_LT, VIS_DUR)")
+    except ImportError as e:
+        errors.append(f"Cannot import src.visualization: {e}")
     return errors
 
 
@@ -96,18 +140,25 @@ def main() -> int:
     print("\n2. Checking src/config.py...")
     config_errors = check_config()
 
-    print("\n3. GEE authentication instructions...")
+    print("\n3. Checking src/change_detection.py...")
+    cd_errors = check_change_detection()
+
+    print("\n4. Checking src/visualization.py...")
+    vis_errors = check_visualization()
+
+    print("\n5. GEE authentication instructions...")
     check_gee_auth_instructions()
 
+    all_errors = failed_imports + config_errors + cd_errors + vis_errors
+
     print()
-    if failed_imports or config_errors:
+    if all_errors:
         print("RESULT: FAILED")
         if failed_imports:
             print(f"  Missing packages: {failed_imports}")
             print("  Run:  conda env create -f environment.yml && conda activate alphaearth")
-        if config_errors:
-            for e in config_errors:
-                print(f"  Config error: {e}")
+        for e in config_errors + cd_errors + vis_errors:
+            print(f"  Error: {e}")
         return 1
 
     print("RESULT: PASSED — environment and config look good.")
